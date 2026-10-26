@@ -161,7 +161,7 @@ Analizar la imagen final con Trivy y linting con KICS
 
 Durante el ejercicio he tenido que familiarizarme con el proceso de compilación de Maven, el funcionamiento del Maven Wrapper y sobre todo, entender cómo ejecutar una aplicación Spring y sus fases de compilación; la comunicación entre contenedores y la persistencia mediante volúmenes.
 
-También he tardado bastante en entender y encontrar las variables de entorno que debo configurar, tanto para la app en sí, como para la base de datos mysql. Por ejemplo, tuve que investigar los archivos `/src/main/resources/*.properties`, más específicamente en ``
+También he tardado bastante en entender y encontrar las variables de entorno que debo configurar, tanto para la app en sí, como para la base de datos mysql. Por ejemplo, tuve que investigar los archivos `/src/main/resources/*.properties`, más específicamente en 
 ``application-mysql.properties`` existe la la línea :
 
 ``spring.datasource.url=${MYSQL_URL:jdbc:mysql://localhost/petclinic}``
