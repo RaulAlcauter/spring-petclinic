@@ -1,5 +1,6 @@
 services:
-  mysql:
+  mysql-petclinic:
+    container_name: mysql-petclinic
     image: mysql:9.7
     ports:
       - "3306:3306"
@@ -10,12 +11,15 @@ services:
       - MYSQL_PASSWORD=petclinic
       - MYSQL_DATABASE=petclinic
     volumes:
-      - "./conf.d:/etc/mysql/conf.d:ro"
-  postgres:
-    image: postgres:18.4
+      - mysql_data:/var/lib/mysql
+  petclinic-app:
+    image: petclinic:latest
     ports:
-      - "5432:5432"
+      - 8000:8080
     environment:
-      - POSTGRES_PASSWORD=petclinic
-      - POSTGRES_USER=petclinic
-      - POSTGRES_DB=petclinic
+      - MYSQL_URL=jdbc:mysql://mysql-petclinic/petclinic
+volumes:
+  mysql_data:
+    external: true
+    
+
