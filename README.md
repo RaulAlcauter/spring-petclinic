@@ -1,181 +1,172 @@
-# Spring PetClinic Sample Application [![Build Status](https://github.com/spring-projects/spring-petclinic/actions/workflows/maven-build.yml/badge.svg)](https://github.com/spring-projects/spring-petclinic/actions/workflows/maven-build.yml)[![Build Status](https://github.com/spring-projects/spring-petclinic/actions/workflows/gradle-build.yml/badge.svg)](https://github.com/spring-projects/spring-petclinic/actions/workflows/gradle-build.yml)
+# Documentación
 
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/spring-projects/spring-petclinic) [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://github.com/codespaces/new?hide_repo_select=true&ref=main&repo=7517918)
+## 1. Objetivo
 
-## Understanding the Spring Petclinic application with a few diagrams
+El objetivo de esta práctica es desplegar Spring PetClinic utilizando Docker, aprendiendo a crear un Dockerfile que tenga en cuenta la seguridad y la optimización. También se desplegará la aplicación junto con una base de datos MySQL, tanto utilizando Docker CLI como Docker Compose.
 
-See the presentation here:  
-[Spring Petclinic Sample Application (legacy slides)](https://speakerdeck.com/michaelisvy/spring-petclinic-sample-application?slide=20)
+Por último, se analizará la imagen creada con herramientas de seguridad para identificar posibles vulnerabilidades y aplicar las mejoras necesarias.
 
-> **Note:** These slides refer to a legacy, pre–Spring Boot version of Petclinic and may not reflect the current Spring Boot–based implementation.  
-> For up-to-date information, please refer to this repository and its documentation.
+## 2. Creación del Dockerfile
 
+Para empezar, elegí Spring PetClinic como aplicación de prueba, ya que es un proyecto Java que utiliza Maven y permite trabajar con una aplicación web real.
 
-## Run Petclinic locally
+Inicialmente utilicé una imagen de Maven como base para la compilación, pero me indicaron que no podía utilizar Docker Hardened Images (DHI). Al revisar el proyecto, me di cuenta de que ya incluía un Maven Wrapper (`mvnw`), por lo que podía utilizar una imagen con JDK 17 y ejecutar Maven a través del Wrapper.
 
-Spring Petclinic is a [Spring Boot](https://spring.io/guides/gs/spring-boot) application built using [Maven](https://spring.io/guides/gs/maven/) or [Gradle](https://spring.io/guides/gs/gradle/).
-Java 17 or later is required for the build, and the application can run with Java 17 or newer.
+El Dockerfile quedó dividido en dos etapas: una para compilar la aplicación y otra para ejecutarla.
 
-You first need to clone the project locally:
+### Compilación de la aplicación
 
-```bash
-git clone https://github.com/spring-projects/spring-petclinic.git
-cd spring-petclinic
-```
-If you are using Maven, you can start the application on the command-line as follows:
+```Dockerfile
+FROM eclipse-temurin:17 AS build
+WORKDIR /app
 
-```bash
-./mvnw spring-boot:run
-```
-With Gradle, the command is as follows:
+COPY .mvn/ .mvn
+COPY mvnw pom.xml ./
 
-```bash
-./gradlew bootRun
-```
+RUN --mount=type=cache,target=/root/.m2 \
+    ./mvnw dependency:go-offline -B
 
-You can then access the Petclinic at <http://localhost:8080/>.
+COPY src ./src
 
-<img width="1042" alt="petclinic-screenshot" src="https://cloud.githubusercontent.com/assets/838318/19727082/2aee6d6c-9b8e-11e6-81fe-e889a5ddfded.png">
-
-You can, of course, run Petclinic in your favorite IDE.
-See below for more details.
-
-## Building a Container
-
-There is no `Dockerfile` in this project. You can build a container image (if you have a docker daemon) using the Spring Boot build plugin:
-
-```bash
-./mvnw spring-boot:build-image
+RUN --mount=type=cache,target=/root/.m2 \
+    ./mvnw clean package -DskipTests -B
 ```
 
-## Running the Container Image
+Primero seleccioné una imagen con JDK 17 y preparé el directorio de trabajo. Después copié los archivos necesarios para utilizar Maven Wrapper y resolver las dependencias del proyecto.
 
-```bash
-docker images | grep petclinic
-docker run -p 8080:8080 docker.io/library/spring-petclinic:latest
+Separé la copia de los archivos de Maven de la copia del código fuente para aprovechar la caché de Docker y evitar repetir trabajo innecesariamente cuando solo cambia el código.
+
+También utilicé una caché para las dependencias de Maven, con el objetivo de acelerar las siguientes construcciones.
+
+Finalmente, compilé la aplicación y generé el JAR que se utilizará para ejecutarla. Durante esta fase omití los tests para simplificar la construcción inicial, aunque queda pendiente decidir cómo integrarlos en el proceso final.
+
+Me ha ayudado bastante la guía de la imagen Maven en DockerHub: [Hardened Images catalog | Maven | Guides | Docker Hub](https://hub.docker.com/hardened-images/catalog/dhi/maven/guides)
+
+En la guía se proporciona un Dockerfile de ejemplo para usar esa imagen base y justamente para desplegar PetClinic. Al final no usé esa imagen base, pero me ha ayudado a entender cómo es dockerizar una aplicación spring boot con maven.
+
+### Ejecución de la aplicación
+
+```Dockerfile
+FROM eclipse-temurin:17-jre AS runtime
+
+RUN groupadd -g 1001 petclinic && \
+    useradd -u 1001 -g petclinic -s /bin/sh -m petclinic
+
+WORKDIR /app
+
+COPY --from=build /app/target/spring-petclinic-*.jar app.jar
+
+RUN chown petclinic:petclinic app.jar
+
+USER petclinic
+
+ENV SPRING_PROFILES_ACTIVE=mysql
+
+EXPOSE 8080
+
+ENTRYPOINT ["java", "-jar", "app.jar"]
 ```
 
-## In case you find a bug/suggested improvement for Spring Petclinic
+Para la segunda etapa utilicé una imagen JRE, ya que la aplicación necesita Java para ejecutarse, pero no necesita todas las herramientas utilizadas durante la compilación.
 
-Our issue tracker is available [here](https://github.com/spring-projects/spring-petclinic/issues).
+Copié únicamente el JAR generado en la primera etapa. De esta forma, evito incluir Maven y el código fuente en la imagen final.
 
-## Database configuration
+También creé un usuario específico para ejecutar la aplicación en lugar de utilizar `root`, como primera medida de seguridad.
 
-In its default configuration, Petclinic uses an in-memory database (H2) which
-gets populated at startup with data. The h2 console is exposed at `http://localhost:8080/h2-console`,
-and it is possible to inspect the content of the database using the `jdbc:h2:mem:<uuid>` URL. The UUID is printed at startup to the console.
+Por último, configuré el perfil `mysql` de Spring y el comando de arranque de la aplicación.
 
-A similar setup is provided for MySQL and PostgreSQL if a persistent database configuration is needed. Note that whenever the database type changes, the app needs to run with a different profile: `spring.profiles.active=mysql` for MySQL or `spring.profiles.active=postgres` for PostgreSQL. See the [Spring Boot documentation](https://docs.spring.io/spring-boot/how-to/properties-and-configuration.html#howto.properties-and-configuration.set-active-spring-profiles) for more detail on how to set the active profile.
+## 3. Conexión con MySQL
 
-You can start MySQL or PostgreSQL locally with whatever installer works for your OS or use docker:
+Una vez que la aplicación funcionaba, empecé a configurar una base de datos MySQL en un contenedor independiente.
 
-```bash
-docker run -e MYSQL_USER=petclinic -e MYSQL_PASSWORD=petclinic -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=petclinic -p 3306:3306 mysql:9.7
+Al principio tuve que entender cómo se comunican dos contenedores y por qué utilizar `localhost` en la configuración de Spring no funcionaba: dentro del contenedor de PetClinic, `localhost` hace referencia al propio contenedor, no al de MySQL.
+
+Para solucionarlo, configuré una red Docker compartida y utilicé el nombre del contenedor MySQL como dirección de conexión.
+
+También aproveché las variables de entorno que ya estaban definidas en la configuración de Spring para establecer la URL de la base de datos sin tener que modificar el código de la aplicación.
+
+### Persistencia de los datos
+
+Para evitar perder los datos al eliminar o recrear el contenedor de MySQL, creé un volumen llamado `mysql_data` y lo asocié al directorio donde MySQL almacena la información.
+
+```
+docker network create pet-network
+docker volume create mysql_data
 ```
 
-or
+De esta forma, la red permite la comunicación entre los contenedores y el volumen permite conservar los datos independientemente del ciclo de vida del contenedor.
+
+## 4. Despliegue con Docker CLI
+
+Una vez construida la imagen de PetClinic, utilicé `docker run` para arrancar primero MySQL y después la aplicación.
 
 ```bash
-docker run -e POSTGRES_USER=petclinic -e POSTGRES_PASSWORD=petclinic -e POSTGRES_DB=petclinic -p 5432:5432 postgres:18.4
+docker run -d --name mysql_pet_container -v mysql_data:/var/lib/mysql -p 3306:3306 -e  MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=petclinic -e MYSQL_USER=petclinic -e MYSQL_PASSWORD=petclinic --network=pet-network mysql:9.7
 ```
-
-Further documentation is provided for [MySQL](https://github.com/spring-projects/spring-petclinic/blob/main/src/main/resources/db/mysql/petclinic_db_setup_mysql.txt)
-and [PostgreSQL](https://github.com/spring-projects/spring-petclinic/blob/main/src/main/resources/db/postgres/petclinic_db_setup_postgres.txt).
-
-Instead of vanilla `docker` you can also use the provided `docker-compose.yml` file to start the database containers. Each one has a service named after the Spring profile:
 
 ```bash
-docker compose up mysql
+docker run -d --name petclinic-app --network=pet-network -p 8000:8080 -e MYSQL_URL=jdbc:mysql://mysql_pet_container:3306/petclinic petclinic:latest
 ```
 
-or
+Durante este proceso configuré los puertos, las variables de entorno, la red compartida y el volumen persistente.
 
-```bash
-docker compose up postgres
+Publiqué el puerto 8080 de PetClinic en el puerto 8000 de mi máquina, de manera que podía acceder a la aplicación desde el navegador mediante `http://localhost:8000`.
+
+Para comprobar el funcionamiento, utilicé `docker logs`, que me permitieron revisar el estado de los contenedores y detectar posibles errores durante el arranque.
+
+## 5. Despliegue con Docker Compose
+
+Después preparé un archivo `docker-compose.yaml` para definir los dos servicios, PetClinic y MySQL, en un único lugar.
+
+La idea era poder levantar toda la aplicación en local con un solo comando, sin tener que ejecutar manualmente cada contenedor.
+
+En el archivo definí las imágenes, los puertos, las variables de entorno y el volumen de MySQL. También configuré el nombre del servicio de base de datos para que PetClinic pudiera conectarse a él a través de la red creada automáticamente por Compose.
+
+Para ejecutar el despliegue utilicé:
+
+```
+docker compose up -d
 ```
 
-## Test Applications
+Y para comprobar su estado:
 
-At development time we recommend you use the test applications set up as `main()` methods in `PetClinicIntegrationTests` (using the default H2 database and also adding Spring Boot Devtools), `MySqlTestApplication` and `PostgresIntegrationTests`. These are set up so that you can run the apps in your IDE to get fast feedback and also run the same classes as integration tests against the respective database. The MySql integration tests use Testcontainers to start the database in a Docker container, and the Postgres tests use Docker Compose to do the same thing.
+```
+docker compose ps
+docker compose logs
+```
 
-## Compiling the CSS
+Durante esta parte tuve que distinguir entre los volúmenes creados y gestionados por Compose y los volúmenes externos, que deben existir previamente.
 
-There is a `petclinic.css` in `src/main/resources/static/resources/css`. It was generated from the `petclinic.scss` source, combined with the [Bootstrap](https://getbootstrap.com/) library. If you make changes to the `scss`, or upgrade Bootstrap, you will need to re-compile the CSS resources using the Maven profile "css", i.e. `./mvnw package -P css`. There is no build profile for Gradle to compile the CSS.
+Queda pendiente mejorar la configuración de seguridad de MySQL y comprobar el comportamiento del despliegue cuando la base de datos tarda en estar disponible.
 
-## Working with Petclinic in your IDE
+## 6. Seguridad y optimización
 
-### Prerequisites
+Las principales medidas aplicadas hasta ahora son:
 
-The following items should be installed in your system:
+- **Construcción multi-stage:** separa la compilación de la ejecución y evita incluir Maven en la imagen final.
+- **Caché de dependencias:** permite reutilizar las dependencias de Maven entre construcciones.
+- **Usuario no privilegiado:** la aplicación se ejecuta con el usuario `petclinic` en lugar de `root`.
+- **Configuración mediante variables de entorno:** permite configurar la conexión a MySQL sin modificar el código fuente.
+- **Volumen persistente:** permite conservar los datos de MySQL al recrear el contenedor.
 
-- Java 17 or newer (full JDK, not a JRE)
-- [Git command line tool](https://help.github.com/articles/set-up-git)
-- Your preferred IDE
-  - Eclipse with the m2e plugin. Note: when m2e is available, there is a m2 icon in `Help -> About` dialog. If m2e is
-  not there, follow the installation process [here](https://www.eclipse.org/m2e/)
-  - [Spring Tools Suite](https://spring.io/tools) (STS)
-  - [IntelliJ IDEA](https://www.jetbrains.com/idea/)
-  - [VS Code](https://code.visualstudio.com)
+**TODO**
+Más medidas de hardening del Dockerfile
+## 7. Auditoría de la imagen
 
-### Steps
+La siguiente fase consiste en analizar la imagen con Trivy y utilizar una herramienta de linting para revisar el Dockerfile.
 
-1. On the command line run:
+**TODO**
+Analizar la imagen final con Trivy y linting con KICS
+## 8. Problemas encontrados
 
-    ```bash
-    git clone https://github.com/spring-projects/spring-petclinic.git
-    ```
+Durante el ejercicio he tenido que familiarizarme con el proceso de compilación de Maven, el funcionamiento del Maven Wrapper y sobre todo, entender cómo ejecutar una aplicación Spring y sus fases de compilación; la comunicación entre contenedores y la persistencia mediante volúmenes.
 
-1. Inside Eclipse or STS:
+También he tardado bastante en entender y encontrar las variables de entorno que debo configurar, tanto para la app en sí, como para la base de datos mysql. Por ejemplo, tuve que investigar los archivos `/src/main/resources/*.properties`, más específicamente en ``
+``application-mysql.properties`` existe la la línea :
 
-    Open the project via `File -> Import -> Maven -> Existing Maven project`, then select the root directory of the cloned repo.
+``spring.datasource.url=${MYSQL_URL:jdbc:mysql://localhost/petclinic}``
 
-    Then either build on the command line `./mvnw generate-resources` or use the Eclipse launcher (right-click on project and `Run As -> Maven install`) to generate the CSS. Run the application's main method by right-clicking on it and choosing `Run As -> Java Application`.
+Ahí es cuando caí que ``MYSQL_URL`` era la variable de entorno que necesitaba configurar con ese formato al arrancar el contenedor de la app para que se comunicara con la base de datos.
 
-1. Inside IntelliJ IDEA:
-
-    In the main menu, choose `File -> Open` and select the Petclinic [pom.xml](pom.xml). Click on the `Open` button.
-
-    - CSS files are generated from the Maven build. You can build them on the command line `./mvnw generate-resources` or right-click on the `spring-petclinic` project then `Maven -> Generates sources and Update Folders`.
-
-    - A run configuration named `PetClinicApplication` should have been created for you if you're using a recent Ultimate version. Otherwise, run the application by right-clicking on the `PetClinicApplication` main class and choosing `Run 'PetClinicApplication'`.
-
-1. Navigate to the Petclinic
-
-    Visit [http://localhost:8080](http://localhost:8080) in your browser.
-
-## Looking for something in particular?
-
-|Spring Boot Configuration | Class or Java property files  |
-|--------------------------|---|
-|The Main Class | [PetClinicApplication](https://github.com/spring-projects/spring-petclinic/blob/main/src/main/java/org/springframework/samples/petclinic/PetClinicApplication.java) |
-|Properties Files | [application.properties](https://github.com/spring-projects/spring-petclinic/blob/main/src/main/resources) |
-|Caching | [CacheConfiguration](https://github.com/spring-projects/spring-petclinic/blob/main/src/main/java/org/springframework/samples/petclinic/system/CacheConfiguration.java) |
-
-## Interesting Spring Petclinic branches and forks
-
-The Spring Petclinic "main" branch in the [spring-projects](https://github.com/spring-projects/spring-petclinic)
-GitHub org is the "canonical" implementation based on Spring Boot and Thymeleaf. There are
-[quite a few forks](https://spring-petclinic.github.io/docs/forks.html) in the GitHub org
-[spring-petclinic](https://github.com/spring-petclinic). If you are interested in using a different technology stack to implement the Pet Clinic, please join the community there.
-
-## Interaction with other open-source projects
-
-One of the best parts about working on the Spring Petclinic application is that we have the opportunity to work in direct contact with many Open Source projects. We found bugs/suggested improvements on various topics such as Spring, Spring Data, Bean Validation and even Eclipse! In many cases, they've been fixed/implemented in just a few days.
-Here is a list of them:
-
-| Name | Issue |
-|------|-------|
-| Spring JDBC: simplify usage of NamedParameterJdbcTemplate | [SPR-10256](https://github.com/spring-projects/spring-framework/issues/14889) and [SPR-10257](https://github.com/spring-projects/spring-framework/issues/14890) |
-| Bean Validation / Hibernate Validator: simplify Maven dependencies and backward compatibility |[HV-790](https://hibernate.atlassian.net/browse/HV-790) and [HV-792](https://hibernate.atlassian.net/browse/HV-792) |
-| Spring Data: provide more flexibility when working with JPQL queries | [DATAJPA-292](https://github.com/spring-projects/spring-data-jpa/issues/704) |
-
-## Contributing
-
-The [issue tracker](https://github.com/spring-projects/spring-petclinic/issues) is the preferred channel for bug reports, feature requests and submitting pull requests.
-
-For pull requests, editor preferences are available in the [editor config](.editorconfig) for easy use in common text editors. Read more and download plugins at <https://editorconfig.org>. All commits must include a __Signed-off-by__ trailer at the end of each commit message to indicate that the contributor agrees to the Developer Certificate of Origin.
-For additional details, please refer to the blog post [Hello DCO, Goodbye CLA: Simplifying Contributions to Spring](https://spring.io/blog/2025/01/06/hello-dco-goodbye-cla-simplifying-contributions-to-spring).
-
-## License
-
-The Spring PetClinic sample application is released under version 2.0 of the [Apache License](https://www.apache.org/licenses/LICENSE-2.0).
+**TODO**
+Desarrollar más problemas encontrados
