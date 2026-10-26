@@ -1,4 +1,5 @@
-# Documentación
+
+# Dockerización de Spring PetClinic
 
 ## 1. Objetivo
 
@@ -34,11 +35,9 @@ RUN --mount=type=cache,target=/root/.m2 \
 
 Primero seleccioné una imagen con JDK 17 y preparé el directorio de trabajo. Después copié los archivos necesarios para utilizar Maven Wrapper y resolver las dependencias del proyecto.
 
-Separé la copia de los archivos de Maven de la copia del código fuente para aprovechar la caché de Docker y evitar repetir trabajo innecesariamente cuando solo cambia el código.
-
 También utilicé una caché para las dependencias de Maven, con el objetivo de acelerar las siguientes construcciones.
 
-Finalmente, compilé la aplicación y generé el JAR que se utilizará para ejecutarla. Durante esta fase omití los tests para simplificar la construcción inicial, aunque queda pendiente decidir cómo integrarlos en el proceso final.
+Finalmente, compilé la aplicación y generé el JAR que se utilizará para ejecutarla. Durante esta fase omití los tests para simplificar la construcción inicial, aunque queda pendiente decidir cómo integrarlos en el proceso final. 
 
 Me ha ayudado bastante la guía de la imagen Maven en DockerHub: [Hardened Images catalog | Maven | Guides | Docker Hub](https://hub.docker.com/hardened-images/catalog/dhi/maven/guides)
 
@@ -137,7 +136,8 @@ docker compose logs
 
 Durante esta parte tuve que distinguir entre los volúmenes creados y gestionados por Compose y los volúmenes externos, que deben existir previamente.
 
-Queda pendiente mejorar la configuración de seguridad de MySQL y comprobar el comportamiento del despliegue cuando la base de datos tarda en estar disponible.
+**TODO**
+Mejorar la configuración de seguridad de MySQL
 
 ## 6. Seguridad y optimización
 
