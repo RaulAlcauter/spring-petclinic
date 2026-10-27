@@ -2,24 +2,34 @@ services:
   mysql-petclinic:
     container_name: mysql-petclinic
     image: mysql:9.7
-    ports:
-      - "3306:3306"
-    environment:
-      - MYSQL_ROOT_PASSWORD=
-      - MYSQL_ALLOW_EMPTY_PASSWORD=true
-      - MYSQL_USER=petclinic
-      - MYSQL_PASSWORD=petclinic
-      - MYSQL_DATABASE=petclinic
+    mem_limit: 512m
+    cpus: 1.0
+    security_opt:
+      - no-new-privileges:true
     volumes:
       - mysql_data:/var/lib/mysql
+    env_file:
+      - .env
+
   petclinic-app:
+    container_name: petclinic-app
     image: petclinic:latest
+    mem_limit: 512m
+    cpus: 1.0
+    read_only: true
+    tmpfs:
+      - /tmp
     ports:
-      - 8000:8080
+      - "8000:8080"
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    env_file:
+      - .env
     environment:
-      - MYSQL_URL=jdbc:mysql://mysql-petclinic/petclinic
+      MYSQL_URL: jdbc:mysql://mysql-petclinic:3306/petclinic
+
 volumes:
   mysql_data:
-    external: true
     
-

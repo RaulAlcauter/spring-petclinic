@@ -48,3 +48,7 @@ _site/
 !petclinic.css
 
 .history/
+
+.env
+.env.*
+!.env.example

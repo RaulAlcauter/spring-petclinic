@@ -1,0 +1,329 @@
+
+Report Summary
+
+┌─────────────────────────────────┬──────────┬─────────────────┬─────────┐
+│             Target              │   Type   │ Vulnerabilities │ Secrets │
+├─────────────────────────────────┼──────────┼─────────────────┼─────────┤
+│ petclinic:latest (ubuntu 26.04) │  ubuntu  │       57        │    -    │
+├─────────────────────────────────┼──────────┼─────────────────┼─────────┤
+│ app/app.jar                     │   jar    │       16        │    -    │
+├─────────────────────────────────┼──────────┼─────────────────┼─────────┤
+│ usr/bin/pebble                  │ gobinary │        0        │    -    │
+└─────────────────────────────────┴──────────┴─────────────────┴─────────┘
+Legend:
+- '-': Not scanned
+- '0': Clean (no security findings detected)
+
+
+petclinic:latest (ubuntu 26.04)
+===============================
+Total: 57 (UNKNOWN: 0, LOW: 4, MEDIUM: 53, HIGH: 0, CRITICAL: 0)
+
+┌──────────────────────────┬─────────────────┬──────────┬──────────┬─────────────────────────┬───────────────┬──────────────────────────────────────────────────────────────┐
+│         Library          │  Vulnerability  │ Severity │  Status  │    Installed Version    │ Fixed Version │                            Title                             │
+├──────────────────────────┼─────────────────┼──────────┼──────────┼─────────────────────────┼───────────────┼──────────────────────────────────────────────────────────────┤
+│ dash                     │ CVE-2026-102473 │ MEDIUM   │ affected │ 0.5.12-12ubuntu3        │               │ dash: dash: Super-polynomial backtracking in pmatch when     │
+│                          │                 │          │          │                         │               │ libc fnmatch is disabled                                     │
+│                          │                 │          │          │                         │               │ https://avd.aquasec.com/nvd/cve-2026-102473                  │
+│                          ├─────────────────┤          │          │                         ├───────────────┼──────────────────────────────────────────────────────────────┤
+│                          │ CVE-2026-102474 │          │          │                         │               │ dash: dash: Heap out-of-bounds write in conv_escape via      │
+│                          │                 │          │          │                         │               │ undersized Unicode escape reservation...                     │
+│                          │                 │          │          │                         │               │ https://avd.aquasec.com/nvd/cve-2026-102474                  │
+├──────────────────────────┼─────────────────┤          │          ├─────────────────────────┼───────────────┼──────────────────────────────────────────────────────────────┤
+│ libc-bin                 │ CVE-2026-18374  │          │          │ 2.43-2ubuntu2.4         │               │ glibc: glibc: Heap buffer overflow via attacker-controlled   │
+│                          │                 │          │          │                         │               │ fopen mode string                                            │
+│                          │                 │          │          │                         │               │ https://avd.aquasec.com/nvd/cve-2026-18374                   │
+│                          ├─────────────────┤          │          │                         ├───────────────┼──────────────────────────────────────────────────────────────┤
+│                          │ CVE-2026-89092  │          │          │                         │               │ glibc: nscd stack overflow leads to degraded DNS resolution  │
+│                          │                 │          │          │                         │               │ https://avd.aquasec.com/nvd/cve-2026-89092                   │
+├──────────────────────────┼─────────────────┤          │          │                         ├───────────────┼──────────────────────────────────────────────────────────────┤
+│ libc-gconv-modules-extra │ CVE-2026-18374  │          │          │                         │               │ glibc: glibc: Heap buffer overflow via attacker-controlled   │
+│                          │                 │          │          │                         │               │ fopen mode string                                            │
+│                          │                 │          │          │                         │               │ https://avd.aquasec.com/nvd/cve-2026-18374                   │
+│                          ├─────────────────┤          │          │                         ├───────────────┼──────────────────────────────────────────────────────────────┤
+│                          │ CVE-2026-89092  │          │          │                         │               │ glibc: nscd stack overflow leads to degraded DNS resolution  │
+│                          │                 │          │          │                         │               │ https://avd.aquasec.com/nvd/cve-2026-89092                   │
+├──────────────────────────┼─────────────────┤          │          │                         ├───────────────┼──────────────────────────────────────────────────────────────┤
+│ libc6                    │ CVE-2026-18374  │          │          │                         │               │ glibc: glibc: Heap buffer overflow via attacker-controlled   │
+│                          │                 │          │          │                         │               │ fopen mode string                                            │
+│                          │                 │          │          │                         │               │ https://avd.aquasec.com/nvd/cve-2026-18374                   │
+│                          ├─────────────────┤          │          │                         ├───────────────┼──────────────────────────────────────────────────────────────┤
+│                          │ CVE-2026-89092  │          │          │                         │               │ glibc: nscd stack overflow leads to degraded DNS resolution  │
+│                          │                 │          │          │                         │               │ https://avd.aquasec.com/nvd/cve-2026-89092                   │
+├──────────────────────────┼─────────────────┤          │          ├─────────────────────────┼───────────────┼──────────────────────────────────────────────────────────────┤
+│ libexpat1                │ CVE-2025-66382  │          │          │ 2.7.4-1ubuntu0.2        │               │ libexpat: libexpat: Denial of service via crafted file       │
+│                          │                 │          │          │                         │               │ processing                                                   │
+│                          │                 │          │          │                         │               │ https://avd.aquasec.com/nvd/cve-2025-66382                   │
+├──────────────────────────┼─────────────────┤          │          ├─────────────────────────┼───────────────┼──────────────────────────────────────────────────────────────┤
+│ libgnutls30t64           │ CVE-2026-67693  │          │          │ 3.8.12-2ubuntu1.1       │               │ gnutls: gnutls: Information disclosure via contradictory Key │
+│                          │                 │          │          │                         │               │ Usage and Extended Key Usage...                              │
+│                          │                 │          │          │                         │               │ https://avd.aquasec.com/nvd/cve-2026-67693                   │
+│                          ├─────────────────┤          │          │                         ├───────────────┼──────────────────────────────────────────────────────────────┤
+│                          │ CVE-2026-88647  │          │          │                         │               │ gnutls: gnutls: Information disclosure via hostname          │
+│                          │                 │          │          │                         │               │ verification bypass                                          │
+│                          │                 │          │          │                         │               │ https://avd.aquasec.com/nvd/cve-2026-88647                   │
+│                          ├─────────────────┤          │          │                         ├───────────────┼──────────────────────────────────────────────────────────────┤
+│                          │ CVE-2026-88648  │          │          │                         │               │ gnutls: gnutls: Cross-domain certificate restriction bypass  │
+│                          │                 │          │          │                         │               │ via incomplete X.509 validation                              │
+│                          │                 │          │          │                         │               │ https://avd.aquasec.com/nvd/cve-2026-88648                   │
+│                          ├─────────────────┤          │          │                         ├───────────────┼──────────────────────────────────────────────────────────────┤
+│                          │ CVE-2026-95184  │          │          │                         │               │ gnutls: gnutls: legitimate user certificates incorrectly     │
+│                          │                 │          │          │                         │               │ rejected causing denial of service                           │
+│                          │                 │          │          │                         │               │ https://avd.aquasec.com/nvd/cve-2026-95184                   │
+│                          ├─────────────────┤          │          │                         ├───────────────┼──────────────────────────────────────────────────────────────┤
+│                          │ CVE-2026-95209  │          │          │                         │               │ gnutls: gnutls: legitimate CA certificates incorrectly       │
+│                          │                 │          │          │                         │               │ rejected causing denial of service                           │
+│                          │                 │          │          │                         │               │ https://avd.aquasec.com/nvd/cve-2026-95209                   │
+│                          ├─────────────────┤          │          │                         ├───────────────┼──────────────────────────────────────────────────────────────┤
+│                          │ CVE-2026-95210  │          │          │                         │               │ gnutls: gnutls: certificates with invalid extensions         │
+│                          │                 │          │          │                         │               │ incorrectly accepted                                         │
+│                          │                 │          │          │                         │               │ https://avd.aquasec.com/nvd/cve-2026-95210                   │
+├──────────────────────────┼─────────────────┤          │          ├─────────────────────────┼───────────────┼──────────────────────────────────────────────────────────────┤
+│ libp11-kit0              │ CVE-2026-13757  │          │          │ 0.26.2-2                │               │ p11-kit: Stack exhaustion via unbounded recursion in RPC     │
+│                          │                 │          │          │                         │               │ attribute parsing                                            │
+│                          │                 │          │          │                         │               │ https://avd.aquasec.com/nvd/cve-2026-13757                   │
+├──────────────────────────┼─────────────────┤          │          ├─────────────────────────┼───────────────┼──────────────────────────────────────────────────────────────┤
+│ libpcre2-8-0             │ CVE-2026-103111 │          │          │ 10.46-1build1           │               │ pcre2: pcre2: Out-of-bounds write via crafted regular        │
+│                          │                 │          │          │                         │               │ expression                                                   │
+│                          │                 │          │          │                         │               │ https://avd.aquasec.com/nvd/cve-2026-103111                  │
+│                          ├─────────────────┤          │          │                         ├───────────────┼──────────────────────────────────────────────────────────────┤
+│                          │ CVE-2026-86145  │          │          │                         │               │ pcre2: PCRE2: Out-of-bounds write allows arbitrary code      │
+│                          │                 │          │          │                         │               │ execution via crafted regular expressions...                 │
+│                          │                 │          │          │                         │               │ https://avd.aquasec.com/nvd/cve-2026-86145                   │
+│                          ├─────────────────┤          │          │                         ├───────────────┼──────────────────────────────────────────────────────────────┤
+│                          │ CVE-2026-89156  │          │          │                         │               │ PCRE2: PCRE2: Out-of-bounds read via invalid UTF data during │
+│                          │                 │          │          │                         │               │ JIT fallback                                                 │
+│                          │                 │          │          │                         │               │ https://avd.aquasec.com/nvd/cve-2026-89156                   │
+│                          ├─────────────────┤          │          │                         ├───────────────┼──────────────────────────────────────────────────────────────┤
+│                          │ CVE-2026-89157  │          │          │                         │               │ pcre2: PCRE2: Out-of-bounds write via large pattern input    │
+│                          │                 │          │          │                         │               │ https://avd.aquasec.com/nvd/cve-2026-89157                   │
+│                          ├─────────────────┤          │          │                         ├───────────────┼──────────────────────────────────────────────────────────────┤
+│                          │ CVE-2026-89158  │          │          │                         │               │ PCRE2: PCRE2: Out-of-bounds write via integer overflow on    │
+│                          │                 │          │          │                         │               │ 32-bit platforms                                             │
+│                          │                 │          │          │                         │               │ https://avd.aquasec.com/nvd/cve-2026-89158                   │
+│                          ├─────────────────┤          │          │                         ├───────────────┼──────────────────────────────────────────────────────────────┤
+│                          │ CVE-2026-89160  │          │          │                         │               │ pcre2: PCRE2: Denial of Service via out-of-bounds read       │
+│                          │                 │          │          │                         │               │ during invalid UTF matching...                               │
+│                          │                 │          │          │                         │               │ https://avd.aquasec.com/nvd/cve-2026-89160                   │
+│                          ├─────────────────┤          │          │                         ├───────────────┼──────────────────────────────────────────────────────────────┤
+│                          │ CVE-2026-89161  │          │          │                         │               │ pcre2: PCRE2: Memory corruption vulnerability in             │
+│                          │                 │          │          │                         │               │ pcre2_jit_match                                              │
+│                          │                 │          │          │                         │               │ https://avd.aquasec.com/nvd/cve-2026-89161                   │
+│                          ├─────────────────┤          │          │                         ├───────────────┼──────────────────────────────────────────────────────────────┤
+│                          │ CVE-2026-89162  │          │          │                         │               │ pcre2: PCRE2: Information disclosure via                     │
+│                          │                 │          │          │                         │               │ pcre2_serialize_encode                                       │
+│                          │                 │          │          │                         │               │ https://avd.aquasec.com/nvd/cve-2026-89162                   │
+├──────────────────────────┼─────────────────┤          │          ├─────────────────────────┼───────────────┼──────────────────────────────────────────────────────────────┤
+│ libsasl2-2               │ CVE-2026-107161 │          │          │ 2.1.28+dfsg1-9ubuntu3   │               │ cyrus-sasl: Heap buffer overflow in cyrus-sasl               │
+│                          │                 │          │          │                         │               │ add_to_challenge() allows malicious server to crash...       │
+│                          │                 │          │          │                         │               │ https://avd.aquasec.com/nvd/cve-2026-107161                  │
+├──────────────────────────┤                 │          │          │                         ├───────────────┤                                                              │
+│ libsasl2-modules-db      │                 │          │          │                         │               │                                                              │
+│                          │                 │          │          │                         │               │                                                              │
+│                          │                 │          │          │                         │               │                                                              │
+├──────────────────────────┼─────────────────┼──────────┤          ├─────────────────────────┼───────────────┼──────────────────────────────────────────────────────────────┤
+│ libsystemd0              │ CVE-2026-40228  │ LOW      │          │ 259.9-0ubuntu0.1        │               │ systemd: systemd-journald: Unintended output to user         │
+│                          │                 │          │          │                         │               │ terminals via logger command                                 │
+│                          │                 │          │          │                         │               │ https://avd.aquasec.com/nvd/cve-2026-40228                   │
+├──────────────────────────┤                 │          │          │                         ├───────────────┤                                                              │
+│ libudev1                 │                 │          │          │                         │               │                                                              │
+│                          │                 │          │          │                         │               │                                                              │
+│                          │                 │          │          │                         │               │                                                              │
+├──────────────────────────┼─────────────────┼──────────┤          ├─────────────────────────┼───────────────┼──────────────────────────────────────────────────────────────┤
+│ locales                  │ CVE-2026-18374  │ MEDIUM   │          │ 2.43-2ubuntu2.4         │               │ glibc: glibc: Heap buffer overflow via attacker-controlled   │
+│                          │                 │          │          │                         │               │ fopen mode string                                            │
+│                          │                 │          │          │                         │               │ https://avd.aquasec.com/nvd/cve-2026-18374                   │
+│                          ├─────────────────┤          │          │                         ├───────────────┼──────────────────────────────────────────────────────────────┤
+│                          │ CVE-2026-89092  │          │          │                         │               │ glibc: nscd stack overflow leads to degraded DNS resolution  │
+│                          │                 │          │          │                         │               │ https://avd.aquasec.com/nvd/cve-2026-89092                   │
+├──────────────────────────┼─────────────────┼──────────┤          ├─────────────────────────┼───────────────┼──────────────────────────────────────────────────────────────┤
+│ login.defs               │ CVE-2024-56433  │ LOW      │          │ 1:4.17.4-2ubuntu3       │               │ shadow-utils: Default subordinate ID configuration in        │
+│                          │                 │          │          │                         │               │ /etc/login.defs could lead to compromise                     │
+│                          │                 │          │          │                         │               │ https://avd.aquasec.com/nvd/cve-2024-56433                   │
+├──────────────────────────┼─────────────────┼──────────┤          ├─────────────────────────┼───────────────┼──────────────────────────────────────────────────────────────┤
+│ p11-kit                  │ CVE-2026-13757  │ MEDIUM   │          │ 0.26.2-2                │               │ p11-kit: Stack exhaustion via unbounded recursion in RPC     │
+│                          │                 │          │          │                         │               │ attribute parsing                                            │
+│                          │                 │          │          │                         │               │ https://avd.aquasec.com/nvd/cve-2026-13757                   │
+├──────────────────────────┤                 │          │          │                         ├───────────────┤                                                              │
+│ p11-kit-modules          │                 │          │          │                         │               │                                                              │
+│                          │                 │          │          │                         │               │                                                              │
+│                          │                 │          │          │                         │               │                                                              │
+├──────────────────────────┼─────────────────┼──────────┤          ├─────────────────────────┼───────────────┼──────────────────────────────────────────────────────────────┤
+│ passwd                   │ CVE-2024-56433  │ LOW      │          │ 1:4.17.4-2ubuntu3       │               │ shadow-utils: Default subordinate ID configuration in        │
+│                          │                 │          │          │                         │               │ /etc/login.defs could lead to compromise                     │
+│                          │                 │          │          │                         │               │ https://avd.aquasec.com/nvd/cve-2024-56433                   │
+├──────────────────────────┼─────────────────┼──────────┤          ├─────────────────────────┼───────────────┼──────────────────────────────────────────────────────────────┤
+│ rust-coreutils           │ CVE-2026-35341  │ MEDIUM   │          │ 0.10.0-1ubuntu2~26.04.1 │               │ A vulnerability in uutils coreutils mkfifo allows for the    │
+│                          │                 │          │          │                         │               │ unauthorized ...                                             │
+│                          │                 │          │          │                         │               │ https://avd.aquasec.com/nvd/cve-2026-35341                   │
+│                          ├─────────────────┤          │          │                         ├───────────────┼──────────────────────────────────────────────────────────────┤
+│                          │ CVE-2026-35344  │          │          │                         │               │ The dd utility in uutils coreutils suppresses errors during  │
+│                          │                 │          │          │                         │               │ file trunc ......                                            │
+│                          │                 │          │          │                         │               │ https://avd.aquasec.com/nvd/cve-2026-35344                   │
+│                          ├─────────────────┤          │          │                         ├───────────────┼──────────────────────────────────────────────────────────────┤
+│                          │ CVE-2026-35345  │          │          │                         │               │ A vulnerability in the tail utility of uutils coreutils      │
+│                          │                 │          │          │                         │               │ allows for the...                                            │
+│                          │                 │          │          │                         │               │ https://avd.aquasec.com/nvd/cve-2026-35345                   │
+│                          ├─────────────────┤          │          │                         ├───────────────┼──────────────────────────────────────────────────────────────┤
+│                          │ CVE-2026-35348  │          │          │                         │               │ The sort utility in uutils coreutils is vulnerable to a      │
+│                          │                 │          │          │                         │               │ process panic...                                             │
+│                          │                 │          │          │                         │               │ https://avd.aquasec.com/nvd/cve-2026-35348                   │
+│                          ├─────────────────┤          │          │                         ├───────────────┼──────────────────────────────────────────────────────────────┤
+│                          │ CVE-2026-35350  │          │          │                         │               │ The cp utility in uutils coreutils fails to properly handle  │
+│                          │                 │          │          │                         │               │ setuid and...                                                │
+│                          │                 │          │          │                         │               │ https://avd.aquasec.com/nvd/cve-2026-35350                   │
+│                          ├─────────────────┤          │          │                         ├───────────────┼──────────────────────────────────────────────────────────────┤
+│                          │ CVE-2026-35351  │          │          │                         │               │ The mv utility in uutils coreutils fails to preserve file    │
+│                          │                 │          │          │                         │               │ ownership du...                                              │
+│                          │                 │          │          │                         │               │ https://avd.aquasec.com/nvd/cve-2026-35351                   │
+│                          ├─────────────────┤          │          │                         ├───────────────┼──────────────────────────────────────────────────────────────┤
+│                          │ CVE-2026-35352  │          │          │                         │               │ A Time-of-Check to Time-of-Use (TOCTOU) race condition       │
+│                          │                 │          │          │                         │               │ exists in the m ......                                       │
+│                          │                 │          │          │                         │               │ https://avd.aquasec.com/nvd/cve-2026-35352                   │
+│                          ├─────────────────┤          │          │                         ├───────────────┼──────────────────────────────────────────────────────────────┤
+│                          │ CVE-2026-35354  │          │          │                         │               │ A Time-of-Check to Time-of-Use (TOCTOU) vulnerability exists │
+│                          │                 │          │          │                         │               │ in the mv ...                                                │
+│                          │                 │          │          │                         │               │ https://avd.aquasec.com/nvd/cve-2026-35354                   │
+│                          ├─────────────────┤          │          │                         ├───────────────┼──────────────────────────────────────────────────────────────┤
+│                          │ CVE-2026-35357  │          │          │                         │               │ The cp utility in uutils coreutils is vulnerable to an       │
+│                          │                 │          │          │                         │               │ information dis...                                           │
+│                          │                 │          │          │                         │               │ https://avd.aquasec.com/nvd/cve-2026-35357                   │
+│                          ├─────────────────┤          │          │                         ├───────────────┼──────────────────────────────────────────────────────────────┤
+│                          │ CVE-2026-35359  │          │          │                         │               │ A Time-of-Check to Time-of-Use (TOCTOU) vulnerability in the │
+│                          │                 │          │          │                         │               │ cp utilit ...                                                │
+│                          │                 │          │          │                         │               │ https://avd.aquasec.com/nvd/cve-2026-35359                   │
+│                          ├─────────────────┤          │          │                         ├───────────────┼──────────────────────────────────────────────────────────────┤
+│                          │ CVE-2026-35360  │          │          │                         │               │ The touch utility in uutils coreutils is vulnerable to a     │
+│                          │                 │          │          │                         │               │ Time-of-Check ......                                         │
+│                          │                 │          │          │                         │               │ https://avd.aquasec.com/nvd/cve-2026-35360                   │
+│                          ├─────────────────┤          │          │                         ├───────────────┼──────────────────────────────────────────────────────────────┤
+│                          │ CVE-2026-35363  │          │          │                         │               │ A vulnerability in the rm utility of uutils coreutils allows │
+│                          │                 │          │          │                         │               │ the bypas...                                                 │
+│                          │                 │          │          │                         │               │ https://avd.aquasec.com/nvd/cve-2026-35363                   │
+│                          ├─────────────────┤          │          │                         ├───────────────┼──────────────────────────────────────────────────────────────┤
+│                          │ CVE-2026-35364  │          │          │                         │               │ A Time-of-Check to Time-of-Use (TOCTOU) race condition       │
+│                          │                 │          │          │                         │               │ exists in the m ......                                       │
+│                          │                 │          │          │                         │               │ https://avd.aquasec.com/nvd/cve-2026-35364                   │
+│                          ├─────────────────┤          │          │                         ├───────────────┼──────────────────────────────────────────────────────────────┤
+│                          │ CVE-2026-35367  │          │          │                         │               │ The nohup utility in uutils coreutils creates its default    │
+│                          │                 │          │          │                         │               │ output file, ......                                          │
+│                          │                 │          │          │                         │               │ https://avd.aquasec.com/nvd/cve-2026-35367                   │
+│                          ├─────────────────┤          │          │                         ├───────────────┼──────────────────────────────────────────────────────────────┤
+│                          │ CVE-2026-35368  │          │          │                         │               │ A vulnerability exists in the chroot utility of uutils       │
+│                          │                 │          │          │                         │               │ coreutils when ...                                           │
+│                          │                 │          │          │                         │               │ https://avd.aquasec.com/nvd/cve-2026-35368                   │
+│                          ├─────────────────┤          │          │                         ├───────────────┼──────────────────────────────────────────────────────────────┤
+│                          │ CVE-2026-35370  │          │          │                         │               │ The id utility in uutils coreutils miscalculates the groups= │
+│                          │                 │          │          │                         │               │ section o ......                                             │
+│                          │                 │          │          │                         │               │ https://avd.aquasec.com/nvd/cve-2026-35370                   │
+│                          ├─────────────────┤          │          │                         ├───────────────┼──────────────────────────────────────────────────────────────┤
+│                          │ CVE-2026-35371  │          │          │                         │               │ The id utility in uutils coreutils exhibits incorrect        │
+│                          │                 │          │          │                         │               │ behavior in its ...                                          │
+│                          │                 │          │          │                         │               │ https://avd.aquasec.com/nvd/cve-2026-35371                   │
+│                          ├─────────────────┤          │          │                         ├───────────────┼──────────────────────────────────────────────────────────────┤
+│                          │ CVE-2026-35373  │          │          │                         │               │ A logic error in the ln utility of uutils coreutils causes   │
+│                          │                 │          │          │                         │               │ the...                                                       │
+│                          │                 │          │          │                         │               │ https://avd.aquasec.com/nvd/cve-2026-35373                   │
+│                          ├─────────────────┤          │          │                         ├───────────────┼──────────────────────────────────────────────────────────────┤
+│                          │ CVE-2026-35374  │          │          │                         │               │ A Time-of-Check to Time-of-Use (TOCTOU) vulnerability exists │
+│                          │                 │          │          │                         │               │ in the sp ...                                                │
+│                          │                 │          │          │                         │               │ https://avd.aquasec.com/nvd/cve-2026-35374                   │
+│                          ├─────────────────┤          │          │                         ├───────────────┼──────────────────────────────────────────────────────────────┤
+│                          │ CVE-2026-35377  │          │          │                         │               │ A logic error in the env utility of uutils coreutils causes  │
+│                          │                 │          │          │                         │               │ a...                                                         │
+│                          │                 │          │          │                         │               │ https://avd.aquasec.com/nvd/cve-2026-35377                   │
+├──────────────────────────┼─────────────────┤          │          ├─────────────────────────┼───────────────┼──────────────────────────────────────────────────────────────┤
+│ tar                      │ CVE-2026-18477  │          │          │ 1.35+dfsg-4ubuntu0.4    │               │ tar: tar: TOCTOU in incremental dumpdir 'X' rename handling  │
+│                          │                 │          │          │                         │               │ allows restore path...                                       │
+│                          │                 │          │          │                         │               │ https://avd.aquasec.com/nvd/cve-2026-18477                   │
+│                          ├─────────────────┤          │          │                         ├───────────────┼──────────────────────────────────────────────────────────────┤
+│                          │ CVE-2026-18508  │          │          │                         │               │ tar: tar: --one-top-level hardlink targets not confined to   │
+│                          │                 │          │          │                         │               │ top-level directory enabling arbitrary...                    │
+│                          │                 │          │          │                         │               │ https://avd.aquasec.com/nvd/cve-2026-18508                   │
+├──────────────────────────┼─────────────────┤          │          ├─────────────────────────┼───────────────┼──────────────────────────────────────────────────────────────┤
+│ wget                     │ CVE-2021-31879  │          │          │ 1.25.0-2ubuntu4.4       │               │ wget: authorization header disclosure on redirect            │
+│                          │                 │          │          │                         │               │ https://avd.aquasec.com/nvd/cve-2021-31879                   │
+└──────────────────────────┴─────────────────┴──────────┴──────────┴─────────────────────────┴───────────────┴──────────────────────────────────────────────────────────────┘
+
+Java (jar)
+==========
+Total: 16 (UNKNOWN: 0, LOW: 0, MEDIUM: 5, HIGH: 6, CRITICAL: 5)
+
+┌─────────────────────────────────────────────────────┬────────────────┬──────────┬────────┬───────────────────┬───────────────────────────┬──────────────────────────────────────────────────────────────┐
+│                       Library                       │ Vulnerability  │ Severity │ Status │ Installed Version │       Fixed Version       │                            Title                             │
+├─────────────────────────────────────────────────────┼────────────────┼──────────┼────────┼───────────────────┼───────────────────────────┼──────────────────────────────────────────────────────────────┤
+│ org.apache.logging.log4j:log4j-api (app.jar)        │ CVE-2026-49844 │ MEDIUM   │ fixed  │ 2.25.4            │ 2.25.5, 2.26.1            │ org.apache.logging.log4j/log4j-api: Apache Log4j API:        │
+│                                                     │                │          │        │                   │                           │ Malformed JSON output due to improper encoding of...         │
+│                                                     │                │          │        │                   │                           │ https://avd.aquasec.com/nvd/cve-2026-49844                   │
+├─────────────────────────────────────────────────────┼────────────────┼──────────┤        ├───────────────────┼───────────────────────────┼──────────────────────────────────────────────────────────────┤
+│ org.apache.tomcat.embed:tomcat-embed-core (app.jar) │ CVE-2026-65182 │ CRITICAL │        │ 11.0.22           │ 11.0.25, 10.1.58, 9.0.121 │ tomcat: Apache Tomcat: Security constraint bypass due to     │
+│                                                     │                │          │        │                   │                           │ improper access control                                      │
+│                                                     │                │          │        │                   │                           │ https://avd.aquasec.com/nvd/cve-2026-65182                   │
+│                                                     ├────────────────┤          │        │                   │                           ├──────────────────────────────────────────────────────────────┤
+│                                                     │ CVE-2026-65905 │          │        │                   │                           │ tomcat: Apache Tomcat: Authentication bypass via limited     │
+│                                                     │                │          │        │                   │                           │ replay attack in DIGEST authenticator...                     │
+│                                                     │                │          │        │                   │                           │ https://avd.aquasec.com/nvd/cve-2026-65905                   │
+│                                                     ├────────────────┤          │        │                   │                           ├──────────────────────────────────────────────────────────────┤
+│                                                     │ CVE-2026-68525 │          │        │                   │                           │ tomcat: Apache Tomcat: Unauthorized resource access via FORM │
+│                                                     │                │          │        │                   │                           │ authentication bypass                                        │
+│                                                     │                │          │        │                   │                           │ https://avd.aquasec.com/nvd/cve-2026-68525                   │
+├─────────────────────────────────────────────────────┼────────────────┼──────────┤        ├───────────────────┼───────────────────────────┼──────────────────────────────────────────────────────────────┤
+│ org.postgresql:postgresql (app.jar)                 │ CVE-2026-54291 │ HIGH     │        │ 42.7.11           │ 42.7.12                   │ org.postgresql/postgresql: com.ongres.scram/scram-client:    │
+│                                                     │                │          │        │                   │                           │ pgjdbc: Man-in-the-middle protection bypass via              │
+│                                                     │                │          │        │                   │                           │ SCRAM-SHA-256-PLUS downgrade                                 │
+│                                                     │                │          │        │                   │                           │ https://avd.aquasec.com/nvd/cve-2026-54291                   │
+├─────────────────────────────────────────────────────┼────────────────┼──────────┤        ├───────────────────┼───────────────────────────┼──────────────────────────────────────────────────────────────┤
+│ org.springframework:spring-webmvc (app.jar)         │ CVE-2026-47884 │ CRITICAL │        │ 7.0.8             │ 7.0.9                     │ org.springframework/spring-webmvc: Spring Framework: Remote  │
+│                                                     │                │          │        │                   │                           │ Code Execution via improper path limitation in XsltView...   │
+│                                                     │                │          │        │                   │                           │ https://avd.aquasec.com/nvd/cve-2026-47884                   │
+│                                                     ├────────────────┤          │        │                   │                           ├──────────────────────────────────────────────────────────────┤
+│                                                     │ CVE-2026-47890 │          │        │                   │                           │ org.springframework/spring-webmvc:                           │
+│                                                     │                │          │        │                   │                           │ org.springframework/spring-webflux: Spring Framework: Stream │
+│                                                     │                │          │        │                   │                           │ corruption in Server-Sent Events (SSE) with view...          │
+│                                                     │                │          │        │                   │                           │ https://avd.aquasec.com/nvd/cve-2026-47890                   │
+├─────────────────────────────────────────────────────┼────────────────┼──────────┤        ├───────────────────┼───────────────────────────┼──────────────────────────────────────────────────────────────┤
+│ tools.jackson.core:jackson-core (app.jar)           │ CVE-2026-89407 │ HIGH     │        │ 3.1.4             │ 3.1.7, 3.2.2              │ com.fasterxml.jackson/jackson-core:                          │
+│                                                     │                │          │        │                   │                           │ tools.jackson.core/jackson-core: Jackson-core: Denial of     │
+│                                                     │                │          │        │                   │                           │ Service via regular expression backtracking                  │
+│                                                     │                │          │        │                   │                           │ https://avd.aquasec.com/nvd/cve-2026-89407                   │
+│                                                     ├────────────────┤          │        │                   ├───────────────────────────┼──────────────────────────────────────────────────────────────┤
+│                                                     │ CVE-2026-89425 │          │        │                   │ 3.1.7, 3.2.3              │ com.fasterxml.jackson.core/jackson-core: Jackson-core:       │
+│                                                     │                │          │        │                   │                           │ Denial of Service via unbounded StringBuilder growth during  │
+│                                                     │                │          │        │                   │                           │ malformed token...                                           │
+│                                                     │                │          │        │                   │                           │ https://avd.aquasec.com/nvd/cve-2026-89425                   │
+├─────────────────────────────────────────────────────┼────────────────┤          │        │                   ├───────────────────────────┼──────────────────────────────────────────────────────────────┤
+│ tools.jackson.core:jackson-databind (app.jar)       │ CVE-2026-68497 │          │        │                   │ 3.2.2, 3.1.6              │ com.fasterxml.jackson.core/jackson-databind:                 │
+│                                                     │                │          │        │                   │                           │ tools.jackson.core/jackson-databind: jackson-databind: CPU   │
+│                                                     │                │          │        │                   │                           │ Denial of Service via unbounded numeric parsing              │
+│                                                     │                │          │        │                   │                           │ https://avd.aquasec.com/nvd/cve-2026-68497                   │
+│                                                     ├────────────────┤          │        │                   ├───────────────────────────┼──────────────────────────────────────────────────────────────┤
+│                                                     │ CVE-2026-91776 │          │        │                   │ 3.1.7, 3.2.3              │ jackson-databind: com.fasterxml.jackson/jackson-core:        │
+│                                                     │                │          │        │                   │                           │ jackson-databind: Denial of Service via unbounded cache      │
+│                                                     │                │          │        │                   │                           │ growth in TypeDeserializerBase...                            │
+│                                                     │                │          │        │                   │                           │ https://avd.aquasec.com/nvd/cve-2026-91776                   │
+│                                                     ├────────────────┤          │        │                   │                           ├──────────────────────────────────────────────────────────────┤
+│                                                     │ CVE-2026-91777 │          │        │                   │                           │ com.fasterxml.jackson.core/jackson-databind:                 │
+│                                                     │                │          │        │                   │                           │ tools.jackson.core:jackson-databind: Jackson-databind:       │
+│                                                     │                │          │        │                   │                           │ Denial of Service via quadratic forward-reference completion │
+│                                                     │                │          │        │                   │                           │ https://avd.aquasec.com/nvd/cve-2026-91777                   │
+│                                                     ├────────────────┼──────────┤        │                   ├───────────────────────────┼──────────────────────────────────────────────────────────────┤
+│                                                     │ CVE-2026-19032 │ MEDIUM   │        │                   │ 3.1.6, 3.2.2              │ com.fasterxml.jackson.core/jackson-databind:                 │
+│                                                     │                │          │        │                   │                           │ tools.jackson.core/jackson-databind: Jackson-databind:       │
+│                                                     │                │          │        │                   │                           │ Uncontrolled URI scheme resolution in Path deserialization   │
+│                                                     │                │          │        │                   │                           │ https://avd.aquasec.com/nvd/cve-2026-19032                   │
+│                                                     ├────────────────┤          │        │                   ├───────────────────────────┼──────────────────────────────────────────────────────────────┤
+│                                                     │ CVE-2026-59889 │          │        │                   │ 3.1.5, 3.2.1              │ com.fasterxml.jackson.core/jackson-databind:                 │
+│                                                     │                │          │        │                   │                           │ Jackson-databind: Privilege escalation via improper handling │
+│                                                     │                │          │        │                   │                           │ of @JsonUnwrapped properties                                 │
+│                                                     │                │          │        │                   │                           │ https://avd.aquasec.com/nvd/cve-2026-59889                   │
+│                                                     ├────────────────┤          │        │                   │                           ├──────────────────────────────────────────────────────────────┤
+│                                                     │ CVE-2026-77310 │          │        │                   │                           │ com.fasterxml.jackson.core/jackson-databind:                 │
+│                                                     │                │          │        │                   │                           │ jackson-databind: Server-Side Request Forgery and internal   │
+│                                                     │                │          │        │                   │                           │ host enumeration via eager DNS...                            │
+│                                                     │                │          │        │                   │                           │ https://avd.aquasec.com/nvd/cve-2026-77310                   │
+│                                                     ├────────────────┤          │        │                   ├───────────────────────────┼──────────────────────────────────────────────────────────────┤
+│                                                     │ CVE-2026-83557 │          │        │                   │ 3.1.6, 3.2.2              │ com.fasterxml.jackson.core/jackson-databind:                 │
+│                                                     │                │          │        │                   │                           │ tools.jackson.core/jackson-databind: jackson-databind: Path  │
+│                                                     │                │          │        │                   │                           │ traversal via incomplete type validation                     │
+│                                                     │                │          │        │                   │                           │ https://avd.aquasec.com/nvd/cve-2026-83557                   │
+└─────────────────────────────────────────────────────┴────────────────┴──────────┴────────┴───────────────────┴───────────────────────────┴──────────────────────────────────────────────────────────────┘

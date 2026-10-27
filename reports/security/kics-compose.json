@@ -1,0 +1,149 @@
+{
+	"kics_version": "v2.2.0",
+	"files_scanned": 1,
+	"lines_scanned": 39,
+	"files_parsed": 1,
+	"lines_parsed": 39,
+	"lines_ignored": 0,
+	"files_failed_to_scan": 0,
+	"queries_total": 21,
+	"queries_failed_to_execute": 0,
+	"queries_failed_to_compute_similarity_id": 0,
+	"scan_id": "console",
+	"severity_counters": {
+		"CRITICAL": 0,
+		"HIGH": 0,
+		"INFO": 1,
+		"LOW": 0,
+		"MEDIUM": 4,
+		"TRACE": 0
+	},
+	"total_counter": 5,
+	"total_bom_resources": 0,
+	"start": "2026-10-27T11:39:47.476235265Z",
+	"end": "2026-10-27T11:39:47.678712027Z",
+	"paths": [
+		"/path/docker-compose.yml"
+	],
+	"queries": [
+		{
+			"query_name": "Container Capabilities Unrestricted",
+			"query_id": "ce76b7d0-9e77-464d-b86f-c5c48e03e22d",
+			"query_url": "https://docs.docker.com/compose/compose-file/compose-file-v3/#cap_add-cap_drop",
+			"severity": "MEDIUM",
+			"platform": "DockerCompose",
+			"cwe": "400",
+			"risk_score": "6.8",
+			"cloud_provider": "COMMON",
+			"category": "Resource Management",
+			"experimental": false,
+			"description": "Some capabilities are not needed in certain (or any) containers. Make sure that you only add capabilities that your container needs. Drop unnecessary capabilities as well.",
+			"description_id": "1ddab108",
+			"files": [
+				{
+					"file_name": "../../path/docker-compose.yml",
+					"similarity_id": "bddaf83d98afe024e6410cb0859f31d73fb0d0079b7258c56d48b68a9e207688",
+					"line": 2,
+					"issue_type": "MissingAttribute",
+					"search_key": "services.mysql-petclinic",
+					"search_line": 2,
+					"search_value": "",
+					"expected_value": "Docker compose file to have 'cap_drop' attribute",
+					"actual_value": "Docker compose file doesn't have 'cap_drop' attribute. Make sure your container only has necessary capabilities."
+				}
+			]
+		},
+		{
+			"query_name": "Container Traffic Not Bound To Host Interface",
+			"query_id": "451d79dc-0588-476a-ad03-3c7f0320abb3",
+			"query_url": "https://docs.docker.com/compose/compose-file/compose-file-v3/#ports",
+			"severity": "MEDIUM",
+			"platform": "DockerCompose",
+			"cwe": "693",
+			"risk_score": "5.2",
+			"cloud_provider": "COMMON",
+			"category": "Networking and Firewall",
+			"experimental": false,
+			"description": "Incoming container traffic should be bound to a specific host interface",
+			"description_id": "909d1bcd",
+			"files": [
+				{
+					"file_name": "../../path/docker-compose.yml",
+					"similarity_id": "8fcb22a9968ae59e34a6793bc5892ba349c1aa35060258efcc1afc40ca534688",
+					"line": 26,
+					"issue_type": "IncorrectValue",
+					"search_key": "services.petclinic-app.ports",
+					"search_line": 26,
+					"search_value": "",
+					"expected_value": "Docker compose file to have 'ports' attribute bound to a specific host interface.",
+					"actual_value": "Docker compose file doesn't have 'ports' attribute bound to a specific host interface"
+				}
+			]
+		},
+		{
+			"query_name": "Healthcheck Not Set",
+			"query_id": "698ed579-b239-4f8f-a388-baa4bcb13ef8",
+			"query_url": "https://docs.docker.com/compose/compose-file/compose-file-v3/#healthcheck",
+			"severity": "MEDIUM",
+			"platform": "DockerCompose",
+			"cwe": "703",
+			"risk_score": "5.1",
+			"cloud_provider": "COMMON",
+			"category": "Availability",
+			"experimental": false,
+			"description": "Check containers periodically to see if they are running properly.",
+			"description_id": "449b7c5c",
+			"files": [
+				{
+					"file_name": "../../path/docker-compose.yml",
+					"similarity_id": "5d7998cfa0a9b335ff403c561e60561bd26a55466cd36dd94683221f7b30c52a",
+					"line": 18,
+					"issue_type": "MissingAttribute",
+					"search_key": "services.petclinic-app",
+					"search_line": 18,
+					"search_value": "",
+					"expected_value": "Healthcheck should be defined.",
+					"actual_value": "Healthcheck is not defined."
+				},
+				{
+					"file_name": "../../path/docker-compose.yml",
+					"similarity_id": "548b2f45741b63a5b4990b2233437980ec12a94c8e825c2364b2d50ddc19fc83",
+					"line": 2,
+					"issue_type": "MissingAttribute",
+					"search_key": "services.mysql-petclinic",
+					"search_line": 2,
+					"search_value": "",
+					"expected_value": "Healthcheck should be defined.",
+					"actual_value": "Healthcheck is not defined."
+				}
+			]
+		},
+		{
+			"query_name": "Shared Volumes Between Containers",
+			"query_id": "8c978947-0ff6-485c-b0c2-0bfca6026466",
+			"query_url": "https://docs.docker.com/compose/compose-file/compose-file-v3/#volumes",
+			"severity": "INFO",
+			"platform": "DockerCompose",
+			"cwe": "693",
+			"risk_score": "0.0",
+			"cloud_provider": "COMMON",
+			"category": "Insecure Configurations",
+			"experimental": false,
+			"description": "Volumes shared between containers can cause data corruption or can be used to share malicious files between containers.",
+			"description_id": "574aa3ab",
+			"files": [
+				{
+					"file_name": "../../path/docker-compose.yml",
+					"similarity_id": "fe329a3a47b3f0cf6c0a542e08c63abea7345c091ff599a3abf58bf590396ec2",
+					"line": 13,
+					"issue_type": "IncorrectValue",
+					"search_key": "services.mysql-petclinic.volumes",
+					"search_line": 13,
+					"search_value": "created-and-shared",
+					"expected_value": "There shouldn't be volumes created and shared between containers",
+					"actual_value": "Volume mysql_data created and shared between containers"
+				}
+			]
+		}
+	]
+}

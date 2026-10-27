@@ -1,0 +1,56 @@
+{
+	"kics_version": "v2.2.0",
+	"files_scanned": 1,
+	"lines_scanned": 39,
+	"files_parsed": 1,
+	"lines_parsed": 39,
+	"lines_ignored": 0,
+	"files_failed_to_scan": 0,
+	"queries_total": 48,
+	"queries_failed_to_execute": 0,
+	"queries_failed_to_compute_similarity_id": 0,
+	"scan_id": "console",
+	"severity_counters": {
+		"CRITICAL": 0,
+		"HIGH": 0,
+		"INFO": 0,
+		"LOW": 1,
+		"MEDIUM": 0,
+		"TRACE": 0
+	},
+	"total_counter": 1,
+	"total_bom_resources": 0,
+	"start": "2026-10-27T11:43:02.494428041Z",
+	"end": "2026-10-27T11:43:03.443020332Z",
+	"paths": [
+		"/path/Dockerfile"
+	],
+	"queries": [
+		{
+			"query_name": "Healthcheck Instruction Missing",
+			"query_id": "b03a748a-542d-44f4-bb86-9199ab4fd2d5",
+			"query_url": "https://docs.docker.com/engine/reference/builder/#healthcheck",
+			"severity": "LOW",
+			"platform": "Dockerfile",
+			"cwe": "710",
+			"risk_score": "3.6",
+			"category": "Insecure Configurations",
+			"experimental": false,
+			"description": "Ensure that HEALTHCHECK is being used. The HEALTHCHECK instruction tells Docker how to test a container to check that it is still working",
+			"description_id": "426121ee",
+			"files": [
+				{
+					"file_name": "../../path/Dockerfile",
+					"similarity_id": "a7abae0d5115dcd03b4afd011ac8562b57024a11fb0b8c3f9b033decae311e8d",
+					"line": 17,
+					"issue_type": "MissingAttribute",
+					"search_key": "FROM={{eclipse-temurin:17-jre@sha256:bdc6c4d91efc63515085e1288be79290cb4806c5e5148dd8035d49b24fa55707 AS runtime}}",
+					"search_line": -1,
+					"search_value": "",
+					"expected_value": "Dockerfile should contain instruction 'HEALTHCHECK'",
+					"actual_value": "Dockerfile doesn't contain instruction 'HEALTHCHECK'"
+				}
+			]
+		}
+	]
+}
