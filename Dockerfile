@@ -14,11 +14,13 @@ COPY src ./src
 RUN --mount=type=cache,target=/root/.m2 \
     ./mvnw clean package -DskipTests -B
 
-FROM eclipse-temurin:17-jre@sha256:bdc6c4d91efc63515085e1288be79290cb4806c5e5148dd8035d49b24fa55707 AS runtime
+FROM eclipse-temurin:27_35-jre-alpine-3.24 AS runtime
 
-RUN groupadd -g 1001 petclinic && \
-    useradd -u 1001 -g petclinic \
-    -s /usr/sbin/nologin -M petclinic
+RUN apk upgrade --no-cache brotli-libs
+
+RUN addgroup -g 1001 petclinic && \
+    adduser -D -u 1001 -G petclinic \
+    -s /sbin/nologin petclinic
 
 WORKDIR /app
 
